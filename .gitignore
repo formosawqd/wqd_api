@@ -1,0 +1,16 @@
+# 忽略 node_modules 文件夹
+node_modules/
+
+# 忽略日志文件
+*.log
+
+# 忽略配置文件（如数据库密码、API 密钥等）
+.env
+
+# 忽略构建目录（例如 dist 或 build）
+dist/
+build/
+
+# 忽略临时文件
+*.tmp
+*.swp
