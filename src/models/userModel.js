@@ -2,13 +2,13 @@ const db = require("./db"); // 数据库连接模块
 
 const getUserByUsername = async (username) => {
   try {
-    console.log("username:", username);
+    // console.log("username:", username);
 
     const result = await db.query("SELECT * FROM users WHERE username = ?", [
       username,
     ]);
 
-    console.log("查询结果:", result[0]);
+    // console.log("查询结果:", result[0]);
     return result[0]; // 返回查询结果
   } catch (error) {
     console.error("数据库查询失败:", error);
