@@ -19,12 +19,18 @@ const getUserByUsername = async (username) => {
 // 创建用户
 const createUser = async (username, hashedPassword, role_id) => {
   try {
+    console.log(111);
+
     const result = await db.query(
       "INSERT INTO users (username, password, role_id) VALUES (?, ?, ?)",
       [username, hashedPassword, role_id]
     );
-    return result.insertId; // 返回新插入用户的ID
+    console.log("result", result[0]);
+
+    return result[0].insertId; // 返回新插入用户的ID
   } catch (error) {
+    console.log("创建用户失败error:", error);
+
     throw error;
   }
 };

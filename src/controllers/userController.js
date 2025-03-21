@@ -1,4 +1,5 @@
-const { getUserById, getUserPermissions } = require("../models/userModel");
+const { getUserById } = require("../models/userModel");
+const { getRoutesByRole } = require("../models/routeModel");
 
 // 获取用户个人信息接口
 const getProfile = async (req, res) => {
@@ -22,9 +23,11 @@ const getProfile = async (req, res) => {
 
 // 获取用户可访问的路由接口
 const getUserRoutes = async (req, res) => {
+  const { role_id } = req.user; // 解析 Token 获取角色 ID
+
   try {
-    const permissions = await getUserPermissions(req.user.role_id);
-    res.json({ status: "success", routes: permissions });
+    const routes = await getRoutesByRole(role_id);
+    res.json({ status: "success", routes });
   } catch (error) {
     res.status(500).json({ status: "error", message: "服务器错误" });
   }

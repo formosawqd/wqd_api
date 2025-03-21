@@ -5,6 +5,6 @@ const { authenticateToken } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.get("/profile", authenticateToken, getProfile);
-router.get("/routes", authenticateToken, getUserRoutes);
+router.get("/getRoutes", authenticateToken, getUserRoutes);
 
 module.exports = router;
