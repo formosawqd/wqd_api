@@ -1,5 +1,5 @@
 const { getUserById } = require("../models/userModel");
-const { getRoutesByRole } = require("../models/routeModel");
+const { getRoutesByRole, getMenuByRole } = require("../models/routeModel");
 
 // 获取用户个人信息接口
 const getProfile = async (req, res) => {
@@ -24,7 +24,6 @@ const getProfile = async (req, res) => {
 // 获取用户可访问的路由接口
 const getUserRoutes = async (req, res) => {
   const { role_id } = req.user; // 解析 Token 获取角色 ID
-
   try {
     const routes = await getRoutesByRole(role_id);
     res.json({ status: "success", routes });
@@ -33,4 +32,16 @@ const getUserRoutes = async (req, res) => {
   }
 };
 
-module.exports = { getProfile, getUserRoutes };
+const getUserMenu = async (req, res) => {
+  const { role_id } = req.user; // 解析 Token 获取角色 ID
+
+  try {
+    const menu = await getMenuByRole(role_id);
+    res.json({ status: "success", menu });
+  } catch (error) {
+    console.error("获取菜单失败:", error);
+    res.status(500).json({ status: "error", message: "服务器错误" });
+  }
+};
+
+module.exports = { getProfile, getUserRoutes, getUserMenu };

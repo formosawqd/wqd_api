@@ -6,7 +6,7 @@ const CryptoJS = require("crypto-js");
 
 // 注册接口
 const register = async (req, res) => {
-  const { username, password, role_id = 2 } = req.body;
+  const { username, password, role_id = 1 } = req.body;
 
   try {
     // 1. 检查用户名是否已存在
@@ -28,7 +28,7 @@ const register = async (req, res) => {
 
     // 4. 创建用户
     const newUser = await createUser(username, hashedPassword, role_id);
-    console.log("newUser", newUser);
+    // console.log("newUser", newUser);
 
     if (!newUser) {
       return res.status(200).json({ status: "error", message: "用户创建失败" });
@@ -37,7 +37,7 @@ const register = async (req, res) => {
     // 5. 只返回注册成功消息，不生成 token
     res.status(201).json({ status: "success", message: "注册成功，请登录" });
   } catch (error) {
-    console.error("注册错误:", error);
+    // console.error("注册错误:", error);
     res.status(500).json({ status: "error", message: "服务器错误" });
   }
 };
