@@ -33,3 +33,6 @@ INSERT INTO role_routes (role_id, route_id) VALUES (1, 6);
 -- 插入新的路由
 INSERT INTO routes (path, name, label, folder, file, component, parent_id)
 VALUES ('/fe', 'FE', '面', 'fe', 'FeView', NULL, NULL);
+
+-- 重新排一下编号
+ALTER TABLE routes AUTO_INCREMENT = 1;

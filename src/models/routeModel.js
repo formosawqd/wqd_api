@@ -19,13 +19,12 @@ const getMenuByRole = async (role_id) => {
   try {
     // 查询该角色可访问的所有路由
     const [routes] = await db.query(
-      `SELECT r.id, r.path, r.label AS menuName, r.folder, r.file, r.component, r.parent_id
+      `SELECT r.id, r.path, r.label AS menuName, r.folder, r.file, r.component, r.parent_id, r.icon
        FROM routes r
        JOIN role_routes rr ON r.id = rr.route_id
        WHERE rr.role_id = ?`,
       [role_id]
     );
-
     // 用 id 作为键存储所有路由
     console.log("routes", routes);
 
@@ -34,7 +33,7 @@ const getMenuByRole = async (role_id) => {
       routeMap[route.id] = {
         path: route.path,
         menuName: route.menuName,
-        icon: "menu", // 默认图标
+        icon: route.icon, // 默认图标
         children: [],
       };
     });
