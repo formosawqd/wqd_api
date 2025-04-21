@@ -14,6 +14,14 @@ parent_id INT DEFAULT NULL, -- 父路由 ID，顶级菜单为 NULL
 FOREIGN KEY (parent_id) REFERENCES routes(id) -- 外键关联父级路由
 );
 
+CREATE TABLE users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(50) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
+role_id INT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 管理员 (role_id = 1) 能访问所有路由
 INSERT INTO role_routes (role_id, route_id) VALUES
 (1, 1), -- /home
@@ -31,8 +39,8 @@ INSERT INTO role_routes (role_id, route_id) VALUES (1, 6);
 -- DELETE FROM role_routes WHERE role_id = 1 AND route_id = 5;
 
 -- 插入新的路由
-INSERT INTO routes (path, name, label, folder, file, component, parent_id)
-VALUES ('/fe', 'FE', '面', 'fe', 'FeView', NULL, NULL);
+INSERT INTO routes (path, name, label, folder, file, component, parent_id, icon)
+VALUES ('/fe', 'FE', '面', 'fe', 'FeView', NULL, NULL , NULL);
 
 -- 重新排一下编号
 ALTER TABLE routes AUTO_INCREMENT = 1;

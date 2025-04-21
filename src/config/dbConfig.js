@@ -4,7 +4,7 @@ require("dotenv").config(); // 如果使用 .env，确保引入 dotenv
 const db = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "formosa",
+  password: "root",
   database: "wqd_db",
 });
 
