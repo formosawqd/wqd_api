@@ -117,3 +117,37 @@ INSERT INTO role_routes (role_id, route_id) VALUES
 -- 普通用户只能访问首页和欢迎页
 INSERT INTO role_routes (role_id, route_id) VALUES
 (2, 1), (2, 2);
+
+CREATE TABLE products (
+id INT AUTO_INCREMENT PRIMARY KEY COMMENT '编号',
+name VARCHAR(255) NOT NULL COMMENT '产品名称',
+category VARCHAR(100) NOT NULL COMMENT '分类',
+price DECIMAL(10, 2) NOT NULL COMMENT '价格',
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间'
+);
+
+INSERT INTO products (name, category, price)
+VALUES
+('红酒杯', '玻璃制品', 19.99),
+('雪人挂件', '节日装饰', 12.50),
+('圣诞树顶星', '节日装饰', 15.75),
+('迷你玻璃球', '玻璃制品', 9.90),
+('水晶铃铛', '节日装饰', 14.20),
+('圣诞袜子', '节日装饰', 11.50),
+('玻璃小天使', '玻璃制品', 18.30),
+('雪花吊坠', '节日装饰', 13.99),
+('彩色玻璃球', '玻璃制品', 10.00),
+('圣诞老人雕像', '节日装饰', 25.00),
+('星星吊坠', '节日装饰', 10.50),
+('透明玻璃蘑菇', '玻璃制品', 16.70),
+('圣诞拐杖糖装饰', '节日装饰', 9.80),
+('玻璃灯笼', '玻璃制品', 21.60),
+('圣诞彩灯球', '节日装饰', 12.75),
+('银色铃铛', '节日装饰', 10.90),
+('彩绘玻璃星星', '玻璃制品', 17.99),
+('圣诞花环', '节日装饰', 22.50),
+('玻璃松果', '玻璃制品', 14.40),
+('小雪人玻璃摆件', '玻璃制品', 13.30),
+('圣诞礼品盒模型', '节日装饰', 15.60),
+('玻璃树屋', '玻璃制品', 20.00),
+('圣诞北极熊', '节日装饰', 18.80);
