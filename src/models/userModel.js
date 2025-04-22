@@ -8,7 +8,7 @@ const getUserByUsername = async (username) => {
       username,
     ]);
 
-    console.log("查询结果:", result[0]);
+    // console.log("查询结果:", result[0]);
     return result[0]; // 返回查询结果
   } catch (error) {
     // console.error("数据库查询失败:", error);

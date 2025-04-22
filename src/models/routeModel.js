@@ -26,7 +26,7 @@ const getMenuByRole = async (role_id) => {
       [role_id]
     );
     // 用 id 作为键存储所有路由
-    console.log("routes", routes);
+    // console.log("routes", routes);
 
     const routeMap = {};
     routes.forEach((route) => {
