@@ -2,6 +2,50 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+const uploadsDir = path.resolve(__dirname, "../uploads");
+
+// 查询文件列表
+const getUploadedFiles = (req, res) => {
+  fs.readdir(uploadsDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ status: "error", message: "读取文件失败" });
+    }
+
+    const fileList = files.map((filename) => ({
+      name: filename,
+      url: `/api/uploads/download/${filename}`,
+    }));
+
+    res.json({ status: "success", data: fileList });
+  });
+};
+
+// 下载接口
+const downloadFile = (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(uploadsDir, filename);
+
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ status: "error", message: "文件不存在" });
+  }
+
+  // 设置 Content-Type，确保文件能被正确识别
+  const fileExtension = path.extname(filename).toLowerCase();
+  let contentType = "application/octet-stream"; // 默认类型是二进制流
+
+  // 根据文件扩展名设置 MIME 类型
+  if (fileExtension === ".jpg" || fileExtension === ".jpeg") {
+    contentType = "image/jpeg";
+  } else if (fileExtension === ".png") {
+    contentType = "image/png";
+  } else if (fileExtension === ".gif") {
+    contentType = "image/gif";
+  }
+
+  res.setHeader("Content-Type", contentType);
+  res.download(filePath, filename);
+};
+
 // 确保 uploads 文件夹存在
 const uploadPath = path.resolve(__dirname, "../uploads");
 if (!fs.existsSync(uploadPath)) {
@@ -36,4 +80,6 @@ const handleUpload = (req, res) => {
 module.exports = {
   uploadMiddleware,
   handleUpload,
+  getUploadedFiles,
+  downloadFile,
 };
