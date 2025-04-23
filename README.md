@@ -151,3 +151,21 @@ VALUES
 ('圣诞礼品盒模型', '节日装饰', 15.60),
 ('玻璃树屋', '玻璃制品', 20.00),
 ('圣诞北极熊', '节日装饰', 18.80);
+homes 首页  DashboardOutlined
+Welcome 欢迎 welcome WelcomeView 1
+Profile 个人资料 profile ProfileView UserOutlined
+Settings 系统设置 settings SettingsView SettingOutlined
+FE 面 fe FeView FundViewOutlined
+Echarts 图表 echarts BarChartOutlined
+Echarts 图表 resize echarts ResizeEcharts 7
+Antd Antd antd AntDesignOutlined
+合并表格 antd MergeTable 10
+表格 antd TableView 10
+Uploads 上传 CloudUploadOutlined
+文件上传 uploads UploadsView 14
+DownloadList 下载 uploads DownloadList 14
+Waterfall 瀑布 echarts WaterfallView 7
+权限 permission ScanOutlined
+Permission 权限 permission PermissionView 18
+Others 其他 AlignCenterOutlined
+Drags 拖拽 others DragsView 20
