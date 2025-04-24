@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
+const iconv = require("iconv-lite");
 const uploadsDir = path.resolve(__dirname, "../uploads");
 
 // 查询文件列表
@@ -10,12 +10,10 @@ const getUploadedFiles = (req, res) => {
     if (err) {
       return res.status(500).json({ status: "error", message: "读取文件失败" });
     }
-
     const fileList = files.map((filename) => ({
       name: filename,
       url: `/api/uploads/download/${filename}`,
     }));
-
     res.json({ status: "success", data: fileList });
   });
 };
@@ -58,7 +56,8 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const name = iconv.decode(Buffer.from(file.originalname, "latin1"), "utf8");
+    cb(null, name); // 如果你需要编码后存储
   },
 });
 
