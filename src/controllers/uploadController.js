@@ -58,7 +58,7 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   },
 });
 
@@ -73,7 +73,7 @@ const handleUpload = (req, res) => {
   res.json({
     status: "success",
     message: "上传成功",
-    filePath: `/uploads/${req.file.filename}`,
+    filePath: `/uploads/${req.file.originalname}`,
   });
 };
 
