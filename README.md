@@ -169,3 +169,8 @@ Waterfall 瀑布 echarts WaterfallView 7
 Permission 权限 permission PermissionView 18
 Others 其他 AlignCenterOutlined
 Drags 拖拽 others DragsView 20
+
+<!-- 新增一列图表用于vue2 -->
+
+ALTER TABLE `routes`
+ADD COLUMN `iconv2` VARCHAR(255) DEFAULT NULL COMMENT '图标 V2 版本';
