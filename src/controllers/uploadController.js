@@ -38,13 +38,15 @@ const uploadMiddleware = multer({ storage });
 
 // 上传接口处理函数
 const handleUpload = (req, res) => {
+  console.log(req.file);
+
   if (!req.file) {
     return res.status(400).json({ status: "error", message: "未上传文件" });
   }
   res.json({
     status: "success",
     message: "上传成功",
-    filePath: `/uploads/${req.file.originalname}`,
+    filePath: `/uploads/${req.file.filename}`,
   });
 };
 
