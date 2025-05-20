@@ -68,75 +68,117 @@ const downloadFile = (req, res) => {
   res.download(filePath, filename);
 };
 
+// 实现处理 multipart/form-data 的中间件
+const chunkStorage = multer.memoryStorage();
+const chunkUploadMiddleware = multer({ storage: chunkStorage });
+
 // 🧩 分片上传（接收分片）
 const handleChunkUpload = (req, res) => {
-  const { filename, chunkIndex } = req.body;
-  const chunkDir = path.join(tmpDir, filename);
+  // console.log("req.body:", req.body);
+  // console.log("req.file:", req.file);
+
+  const { filename, chunkIndex, fileHash } = req.body;
+
+  if (!filename || chunkIndex === undefined || !fileHash) {
+    return res.status(400).json({ status: "error", message: "参数不完整" });
+  }
+
+  const chunkDir = path.join(tmpDir, fileHash);
   if (!fs.existsSync(chunkDir)) {
     fs.mkdirSync(chunkDir, { recursive: true });
   }
 
   const chunkPath = path.join(chunkDir, chunkIndex);
-  const stream = fs.createWriteStream(chunkPath);
-  req.pipe(stream);
-  req.on("end", () => {
+  const buffer = req.file.buffer;
+
+  fs.writeFile(chunkPath, buffer, (err) => {
+    if (err) {
+      console.error("写入分片失败:", err);
+      return res.status(500).json({ status: "error", message: "写入分片失败" });
+    }
     res.json({ status: "success", message: `Chunk ${chunkIndex} uploaded` });
   });
 };
 
 // 🔄 合并分片
-const mergeChunks = (req, res) => {
-  const { filename, totalChunks } = req.body;
-  const chunkDir = path.join(tmpDir, filename);
+const mergeChunks = async (req, res) => {
+  const { filename, totalChunks, fileHash } = req.body; // 新增 fileHash
+
+  if (!fileHash) {
+    return res
+      .status(400)
+      .json({ status: "error", message: "缺少 fileHash 参数" });
+  }
+
+  const chunkDir = path.join(tmpDir, fileHash);
   const targetPath = path.join(uploadsDir, filename);
+  try {
+    const writeStream = fs.createWriteStream(targetPath);
 
-  const writeStream = fs.createWriteStream(targetPath);
-  let current = 0;
+    for (let i = 0; i < totalChunks; i++) {
+      const chunkPath = path.join(chunkDir, String(i));
+      if (!fs.existsSync(chunkPath)) {
+        throw new Error(`缺少第${i}个分片`);
+      }
+      // 读取当前分片，写入目标文件
+      const data = fs.readFileSync(chunkPath);
+      writeStream.write(data);
+    }
 
-  function appendChunk() {
-    if (current >= totalChunks) {
+    writeStream.end();
+
+    // 等待写入结束事件
+    writeStream.on("finish", () => {
+      // 删除临时分片目录
       fs.rmSync(chunkDir, { recursive: true, force: true });
-      return res.json({
+      console.log("合并完成");
+      res.json({
         status: "success",
         message: "合并完成",
         filePath: `/uploads/${filename}`,
       });
-    }
+    });
 
-    const chunkPath = path.join(chunkDir, `${current}`);
-    const readStream = fs.createReadStream(chunkPath);
-    readStream.pipe(writeStream, { end: false });
-    readStream.on("end", () => {
-      current++;
-      appendChunk();
+    writeStream.on("error", (err) => {
+      console.error("写入目标文件失败:", err);
+      res.status(500).json({ status: "error", message: "写入文件失败" });
     });
-    readStream.on("error", (err) => {
-      console.error("合并失败:", err);
-      res.status(500).json({ status: "error", message: "合并失败" });
-    });
+  } catch (error) {
+    console.error("合并失败:", error);
+    res
+      .status(500)
+      .json({ status: "error", message: error.message || "合并失败" });
   }
-
-  appendChunk();
 };
 
 // ✅ 检查是否已上传过（断点续传）
 const checkUploaded = (req, res) => {
-  const { filename } = req.query;
-  const filePath = path.join(uploadsDir, filename);
-  const chunkDir = path.join(tmpDir, filename);
-  if (fs.existsSync(filePath)) {
+  // console.log("checkUploaded", req.query);
+
+  const { hash, filename } = req.query.params;
+  if (!hash || !filename) {
+    return res.status(400).json({ status: "error", message: "缺少参数" });
+  }
+
+  // 已上传完整文件的路径（用于秒传判断）
+  const fullFilePath = path.join(uploadsDir, filename);
+  if (fs.existsSync(fullFilePath)) {
     return res.json({ uploaded: true, chunks: [] });
   }
 
+  // 分片目录路径（用于断点续传）
+  const chunkDir = path.join(tmpDir, hash);
   let chunks = [];
   if (fs.existsSync(chunkDir)) {
-    chunks = fs.readdirSync(chunkDir);
+    chunks = fs.readdirSync(chunkDir).filter((f) => /^\d+$/.test(f)); // 只保留数字分片
   }
+
   res.json({ uploaded: false, chunks });
 };
 
 module.exports = {
   uploadMiddleware,
+  chunkUploadMiddleware,
   handleUpload,
   getUploadedFiles,
   downloadFile,

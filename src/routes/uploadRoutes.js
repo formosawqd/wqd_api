@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   uploadMiddleware,
+  chunkUploadMiddleware,
   handleUpload,
   handleChunkUpload,
   mergeChunks,
@@ -13,7 +14,11 @@ const {
 router.post("/upload", uploadMiddleware.single("file"), handleUpload);
 
 // 分片
-router.post("/upload/chunk", handleChunkUpload);
+router.post(
+  "/upload/chunk",
+  chunkUploadMiddleware.single("file"),
+  handleChunkUpload
+);
 router.post("/upload/merge", mergeChunks);
 router.get("/upload/check", checkUploaded);
 // 查询/下载
