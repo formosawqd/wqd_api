@@ -40,8 +40,8 @@ INSERT INTO role_routes (role_id, route_id) VALUES (1, 6);
 -- DELETE FROM role_routes WHERE role_id = 1 AND route_id = 5;
 
 -- 插入新的路由
-INSERT INTO routes (path, name, label, folder, file, component, parent_id, icon)
-VALUES ('/fe', 'FE', '面', 'fe', 'FeView', NULL, NULL , NULL);
+INSERT INTO routes (path, name, label, folder, file, component, parent_id, icon , iconv2)
+VALUES ('/fe', 'FE', '面', 'fe', 'FeView', NULL, NULL , NULL , NULL);
 
 -- 重新排一下编号
 ALTER TABLE routes AUTO_INCREMENT = 1;
@@ -174,23 +174,23 @@ Drags 拖拽 others DragsView 20
 
 ALTER TABLE `routes`
 ADD COLUMN `iconv2` VARCHAR(255) DEFAULT NULL COMMENT '图标 V2 版本';
-/home	homes	首页					DashboardOutlined	home
-/welcome	Welcome	欢迎	welcome	WelcomeView		1		
-/profile	Profile	个人资料	profile	ProfileView			UserOutlined	profile
-/settings	Settings	系统设置	settings	SettingsView			SettingOutlined	setting
-/fe	FE	面	fe	FeView			FundViewOutlined	shake
-/echarts	Echarts	图表	echarts				BarChartOutlined	area-chart
-/resizeEcharts	Echarts	图表resize	echarts	ResizeEcharts		7		
-/antd	Antd	Antd	antd				AntDesignOutlined	table
-/mergetable		合并表格	antd	MergeTable		10		
-/table		表格	antd	TableView		10		tablet
-/uploads	Uploads	上传					CloudUploadOutlined	upload
-/uploadsSinggle		文件上传	uploads	UploadsView		14		
-/downloadList	DownloadList	下载	uploads	DownloadList		14		download
-/waterfall	Waterfall	瀑布	echarts	WaterfallView		7		bg-colors
-/permissions		权限操作	permission				ScanOutlined	experiment
-/permission	Permission	权限	permission	PermissionView		18		number
-/others	Others	其他					AlignCenterOutlined	codepen-circle
-/drags	Drags	拖拽	others	DragsView		20		drag
-/virtualList	virtualList	虚拟列表	others	VirtualListView		20		unordered-list
-/virtualformlist	VirtualFormList	虚拟	others	VirtualFormList		20		
+/home homes 首页  DashboardOutlined home
+/welcome Welcome 欢迎 welcome WelcomeView 1
+/profile Profile 个人资料 profile ProfileView UserOutlined profile
+/settings Settings 系统设置 settings SettingsView SettingOutlined setting
+/fe FE 面 fe FeView FundViewOutlined shake
+/echarts Echarts 图表 echarts BarChartOutlined area-chart
+/resizeEcharts Echarts 图表 resize echarts ResizeEcharts 7
+/antd Antd Antd antd AntDesignOutlined table
+/mergetable 合并表格 antd MergeTable 10
+/table 表格 antd TableView 10 tablet
+/uploads Uploads 上传 CloudUploadOutlined upload
+/uploadsSinggle 文件上传 uploads UploadsView 14
+/downloadList DownloadList 下载 uploads DownloadList 14 download
+/waterfall Waterfall 瀑布 echarts WaterfallView 7 bg-colors
+/permissions 权限操作 permission ScanOutlined experiment
+/permission Permission 权限 permission PermissionView 18 number
+/others Others 其他 AlignCenterOutlined codepen-circle
+/drags Drags 拖拽 others DragsView 20 drag
+/virtualList virtualList 虚拟列表 others VirtualListView 20 unordered-list
+/virtualformlist VirtualFormList 虚拟 others VirtualFormList 20
