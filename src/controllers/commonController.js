@@ -29,4 +29,42 @@ const getLists = async (req, res) => {
     res.status(500).json({ status: "error", message: "服务器错误" });
   }
 };
-module.exports = { getLists };
+
+// 懒加载树节点
+const getLazyTree = async (req, res) => {
+  const { parentId = null } = req.query;
+
+  try {
+    // 查询指定父节点下的所有子节点
+    const [rows] = await db.query(
+      "SELECT id, name FROM categories WHERE parent_id " +
+        (parentId === null ? "IS NULL" : "= ?"),
+      parentId === null ? [] : [parentId]
+    );
+
+    // 判断每个节点是否有子节点
+    const nodesWithLeaf = await Promise.all(
+      rows.map(async (item) => {
+        const [[{ count }]] = await db.query(
+          "SELECT COUNT(*) AS count FROM categories WHERE parent_id = ?",
+          [item.id]
+        );
+        return {
+          title: item.name,
+          key: item.id,
+          isLeaf: count === 0,
+        };
+      })
+    );
+
+    res.json({
+      status: "success",
+      data: nodesWithLeaf,
+    });
+  } catch (error) {
+    console.error("懒加载树失败:", error);
+    res.status(500).json({ status: "error", message: "服务器错误" });
+  }
+};
+
+module.exports = { getLists, getLazyTree };

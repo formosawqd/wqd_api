@@ -194,3 +194,46 @@ ADD COLUMN `iconv2` VARCHAR(255) DEFAULT NULL COMMENT '图标 V2 版本';
 /drags Drags 拖拽 others DragsView 20 drag
 /virtualList virtualList 虚拟列表 others VirtualListView 20 unordered-list
 /virtualformlist VirtualFormList 虚拟 others VirtualFormList 20
+
+<!-- 懒加载树 -->
+
+CREATE TABLE categories (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+parent_id INT DEFAULT NULL
+);
+
+INSERT INTO categories (id, name, parent_id) VALUES
+-- 一级分类
+(1, '服装', NULL),
+(2, '数码产品', NULL),
+(3, '家居用品', NULL),
+(4, '食品', NULL),
+
+-- 二级分类
+(5, '男装', 1),
+(6, '女装', 1),
+(7, '手机', 2),
+(8, '笔记本电脑', 2),
+(9, '厨房用品', 3),
+(10, '家具', 3),
+(11, '零食', 4),
+(12, '饮料', 4),
+
+-- 三级分类
+(13, 'T 恤', 5),
+(14, '西装', 5),
+(15, '连衣裙', 6),
+(16, '半身裙', 6),
+(17, '安卓手机', 7),
+(18, '苹果手机', 7),
+(19, '游戏本', 8),
+(20, '轻薄本', 8),
+(21, '锅具', 9),
+(22, '餐具', 9),
+(23, '沙发', 10),
+(24, '床', 10),
+(25, '薯片', 11),
+(26, '饼干', 11),
+(27, '可乐', 12),
+(28, '果汁', 12);
