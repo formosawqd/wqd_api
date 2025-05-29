@@ -1,15 +1,29 @@
 const express = require("express");
+const http = require("http");
 const cors = require("cors");
-const routes = require("./routes"); // 统一管理路由
+const { Server } = require("socket.io");
+const routes = require("./routes");
+const registerSocketModules = require("./socket"); // 👈 注册所有 socket 模块
 require("dotenv").config();
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
 app.use(cors());
 app.use(express.json());
+app.use("/api", routes);
 
-app.use("/api", routes); // 这里只需要挂载 `/api`，所有子路由在 `routes/index.js` 内定义
+// 👇 注册 socket 模块
+registerSocketModules(io);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
 });
