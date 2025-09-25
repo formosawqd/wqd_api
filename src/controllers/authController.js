@@ -35,7 +35,12 @@ const register = async (req, res) => {
     }
 
     // 5. 只返回注册成功消息，不生成 token
-    res.status(201).json({ status: "success", message: "注册成功，请登录" });
+    res.status(201).json({
+      status: "success",
+      code: 100,
+      message: "注册成功，请登录",
+      data: {},
+    });
   } catch (error) {
     // console.error("注册错误:", error);
     res.status(500).json({ status: "error", message: "服务器错误" });
@@ -56,9 +61,12 @@ const login = async (req, res) => {
     // 2. 查询用户
     const user = await getUserByUsername(username);
     if (!user.length) {
-      return res
-        .status(200)
-        .json({ status: "error", message: "用户名或密码错误" });
+      return res.status(200).json({
+        status: "error",
+        code: 100,
+        message: "用户名或密码错误",
+        data: {},
+      });
     }
 
     // 3. 比对密码

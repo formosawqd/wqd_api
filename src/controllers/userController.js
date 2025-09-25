@@ -26,7 +26,13 @@ const getUserRoutes = async (req, res) => {
   const { role_id } = req.user; // 解析 Token 获取角色 ID
   try {
     const routes = await getRoutesByRole(role_id);
-    res.json({ status: "success", routes });
+    res.json({
+      status: "success",
+      code: 100,
+      data: {
+        routes,
+      },
+    });
   } catch (error) {
     res.status(500).json({ status: "error", message: "服务器错误" });
   }
@@ -37,7 +43,13 @@ const getUserMenu = async (req, res) => {
 
   try {
     const menu = await getMenuByRole(role_id);
-    res.json({ status: "success", menu });
+    res.json({
+      status: "success",
+      code: 100,
+      data: {
+        menu,
+      },
+    });
   } catch (error) {
     console.error("获取菜单失败:", error);
     res.status(500).json({ status: "error", message: "服务器错误" });
